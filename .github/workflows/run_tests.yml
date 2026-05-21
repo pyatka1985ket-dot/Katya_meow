@@ -17,8 +17,8 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     name: Tests
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # <--- СЮДА
+    # env:                         <--- УДАЛИТЕ ЭТУ СТРОКУ
+    #   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   <--- УДАЛИТЕ ЭТУ СТРОКУ
     steps:
       - name: Copy source code
         uses: actions/checkout@v4
