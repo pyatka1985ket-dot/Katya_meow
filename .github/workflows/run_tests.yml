@@ -21,14 +21,35 @@ jobs:
       - name: Copy source code
         uses: actions/checkout@v4
         
-      - name: Set up Python environment  # Исправлено название
-        uses: actions/setup-python@v5  # Исправлено: action → actions
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
           
-      - name: install dependencies
-        run: pip install -r requirements.txt  # Исправлен пробел
-        
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
+          google-chrome --version
+          
+      - name: Install ChromeDriver
+        run: |
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+          echo "Chrome version: $CHROME_VERSION"
+          DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          echo "ChromeDriver version: $DRIVER_VERSION"
+          wget -q "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          chromedriver --version
+          
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install selenium webdriver-manager  # Добавьте webdriver-manager для упрощения
+          
       - name: Run tests
         run: |
           if [ "${{ github.event.inputs.deployment_target }}" = "all" ]; then
