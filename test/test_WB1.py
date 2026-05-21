@@ -7,18 +7,29 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def test_open_wb(browser):
+def test_open_wb1(browser):
     options = Options()
     options.add_argument('--headless')
     browser.get('https://career.rwb.ru/?/index.html')
     time.sleep(2)
-    vacancy = browser.find_element(By.CSS_SELECTOR, "a[href='/vacancies']")
-    browser.execute_script("arguments[0].click();", vacancy)
-    time.sleep(3)
-    title = WebDriverWait(browser, 10).until(
+    title = WebDriverWait(browser, 5).until(
     EC.presence_of_element_located((By.CSS_SELECTOR, 'h2'))
         )
-    assert title.text == 'Присоединяйся к команде'
+    assert title.text == 'Вместе\nмы сможем больше'
+    body_2 = WebDriverWait(browser, 5).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, '.body2._vacancyBlockTitle_1azcz_98'))
+    )
+    assert body_2.text == 'Территория твоих возможностей'
+    browser.execute_script("window.scrollBy(0, 1000);")
+    time.sleep(1)
+    body_3 = WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "h3.h3"))
+    )
+    assert body_3.text == 'Wildberries — место, где ты можешь стать тем, кем хочешь'
+
+
+
+
 
 
 def test_header(browser):
@@ -45,6 +56,8 @@ def test_header(browser):
         EC.presence_of_element_located((By.CSS_SELECTOR, "a[href='https://job.wb.ru/?utm_source=wb&utm_medium=career&utm_campaign=header']"))
     )
     assert service_link.text == 'Сервисные позиции'
+
+
 
 
 

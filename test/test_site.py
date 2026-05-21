@@ -1,6 +1,7 @@
 import pytest
 from selenium import webdriver
 import time
+from selenium.webdriver.common.by import By
 from pages.homepages import Homepages
 from pages.product import ProductPage
 from selenium.webdriver.firefox.options import Options
@@ -37,8 +38,8 @@ def test_two_monitors(browser):
     #monitors_link.click()
     time.sleep(2)  # позорище
     homepages.check_that_products_count(2)
-    #monitors = browser.find_elements(By.CSS_SELECTOR, value = '.card')
-    #assert len(monitors) == 2
+    monitors = browser.find_elements(By.CSS_SELECTOR, value = '.card')
+    assert len(monitors) == 2
 
 
 
